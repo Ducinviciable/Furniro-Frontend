@@ -31,17 +31,7 @@ const SignupPage = () => {
     if (isAuthenticated.isAuthenticated) {
       router.push("/");
     }
-  }, []);
-
-  const validateForm = () => {
-    // check valid phone
-    const regexPhoneNumber = /(84|0[3|5|7|8|9])+([0-9]{8})\b/g;
-
-    if (!registerParams.phone.match(regexPhoneNumber)) {
-      toast.error("Invalid phone number");
-      return false;
-    }
-  };
+  }, [isAuthenticated.isAuthenticated, router]);
 
   const handleOnSubmit = (e: FormSubmit) => {
     e.preventDefault();

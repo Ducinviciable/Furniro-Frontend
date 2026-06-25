@@ -286,3 +286,62 @@ export interface ISearchProduct {
   description: string;
 }
 
+export interface IOrderDetailItem {
+  id: number;
+  quantity: number;
+  price: number;
+  product_id?: number;
+  product: {
+    name: string;
+    products_images?: { images: string[] };
+  };
+}
+
+export interface IOrderAddress {
+  first_name: string;
+  last_name: string;
+  street?: string;
+  city: string;
+  province: string;
+  country?: string;
+  zipcode: string;
+  phone: string;
+  email: string;
+}
+
+export interface IOrderCustomer {
+  phone: string;
+  account: {
+    email: string;
+  };
+}
+
+export interface IOrder {
+  id: number;
+  status: OrderStatus;
+  order_day: string;
+  payment_method: string;
+  subtotal: number;
+  order_detail: IOrderDetailItem[];
+  address?: IOrderAddress;
+}
+
+export interface IAdminOrder extends IOrder {
+  address: IOrderAddress;
+  customer: IOrderCustomer;
+}
+
+export interface ICreateOrderResponse {
+  id: number;
+  status: OrderStatus;
+}
+
+export interface ICreateCategoryDto {
+  name: string;
+}
+
+export interface IUpdateCategoryDto {
+  id: number | string;
+  name: string;
+}
+

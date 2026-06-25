@@ -26,6 +26,8 @@ import { useRouter } from "next/router";
 import { IProductInShop } from "@/utils/types";
 import { useState } from "react";
 import toast from "react-hot-toast";
+import { getRtkErrorMessage } from "@/utils/rtkHelpers";
+import Image from "next/image";
 
 export default function ProductsPage() {
   const {
@@ -33,8 +35,7 @@ export default function ProductsPage() {
     isLoading,
     error,
     refetch,
-  } = useGetProductsQuery({
-    skip: false,
+  } = useGetProductsQuery(undefined, {
     refetchOnMountOrArgChange: true,
   });
 
@@ -50,7 +51,7 @@ export default function ProductsPage() {
   }
 
   if (error) {
-    return <div>Error: {(error as any).message || (error as any).data?.message || "An unknown error occurred."}</div>;
+    return <div>Error: {getRtkErrorMessage(error)}</div>;
   }
 
   const products = productsRes?.data || [];
@@ -89,7 +90,7 @@ export default function ProductsPage() {
           toast.success("Product deleted successfully.");
           refetch();
         })
-        .catch((error) => {
+        .catch(() => {
           toast.error("Failed to delete product.");
         });
       setIsDeleteModalOpen(false);
@@ -138,9 +139,12 @@ export default function ProductsPage() {
                 <TableCell>{product.id}</TableCell>
                 <TableCell>{product.name}</TableCell>
                 <TableCell>
-                  <img
+                  <Image
                     src={product.image}
                     alt={product.name}
+                    width={64}
+                    height={64}
+                    unoptimized
                     className="w-16 h-16 object-cover rounded-md"
                   />
                 </TableCell>

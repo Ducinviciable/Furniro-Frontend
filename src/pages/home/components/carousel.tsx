@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
+import Image from "next/image";
 import { carouselImages } from "@/utils/constant";
 
 const Carousel: React.FC = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
 
-  const handleNext = () => {
+  const handleNext = useCallback(() => {
     setCurrentSlide((prev) => (prev + 1) % carouselImages.length);
-  };
+  }, []);
 
   const handlePrev = () => {
     setCurrentSlide(
@@ -17,7 +18,7 @@ const Carousel: React.FC = () => {
   useEffect(() => {
     const interval = setInterval(handleNext, 3000);
     return () => clearInterval(interval);
-  }, []);
+  }, [handleNext]);
 
   return (
     <div
@@ -30,15 +31,17 @@ const Carousel: React.FC = () => {
         {carouselImages.map((slide, index) => (
           <div
             key={index}
-            className={`absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 transition-opacity duration-700 ease-in-out ${
+            className={`absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 transition-opacity duration-700 ease-in-out relative ${
               currentSlide === index ? "opacity-100" : "opacity-0"
             }`}
             data-carousel-item
           >
-            <img
+            <Image
               src={slide}
               alt={`Slide ${index + 1}`}
-              className="w-full h-full object-cover" // Adjusted classes
+              fill
+              unoptimized
+              className="object-cover"
             />
           </div>
         ))}

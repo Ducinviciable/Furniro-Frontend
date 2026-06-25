@@ -1,21 +1,17 @@
 import Footer from "@/pages/layouts/Footer";
 import Header from "@/pages/layouts/Header";
 import Image from "next/image";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Button from "@/components/Button";
 import HeadImage from "@/components/HeadImage";
 import FeatureCard from "@/components/FeatureCard";
 import { useRouter } from "next/router";
-import { IProduct, IProductCompare } from "@/utils/types";
-import { useGetProductsByIdQuery } from "@/redux/api/productApi";
 import { useGetProductsForComparisonQuery } from "@/redux/api/productcompare";
 
 const ComparePage: React.FC = () => {
   const router = useRouter();
   const { productId1, productId2 } = router.query;
 
-  const productResponse = useGetProductsByIdQuery(productId1);
-  const [product1, setProduct] = useState<IProductCompare>();
   const {
     data: products,
     isLoading,

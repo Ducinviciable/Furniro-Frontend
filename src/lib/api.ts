@@ -5,6 +5,35 @@ import {
   eachYearOfInterval,
 } from "date-fns";
 
+export interface IRevenueDataPoint {
+  date: string;
+  revenue: number;
+  [key: string]: string | number;
+}
+
+export interface ITopSellingProduct {
+  id: number;
+  name: string;
+  sales: number;
+  image: string;
+  [key: string]: string | number;
+}
+
+export interface IDashboardData {
+  totalCustomers: number;
+  totalOrders: number;
+  totalProducts: number;
+  totalCategories: number;
+  revenueData: IRevenueDataPoint[];
+  topSellingProducts: ITopSellingProduct[];
+}
+
+interface IProductListItem {
+  id: number;
+  name: string;
+  image: string;
+}
+
 export async function fetchStatsData() {
   const result = await fetch(process.env.NEXT_PUBLIC_API_URL + "order/stats");
   return result;
@@ -15,7 +44,7 @@ export async function fetchProductsData() {
   return result;
 }
 
-export async function fetchDashboardData(startDate: Date, endDate: Date) {
+export async function fetchDashboardData(startDate: Date, endDate: Date): Promise<IDashboardData> {
   const days = eachDayOfInterval({ start: startDate, end: endDate });
   const months = eachMonthOfInterval({ start: startDate, end: endDate });
   const years = eachYearOfInterval({ start: startDate, end: endDate });
@@ -44,7 +73,7 @@ export async function fetchDashboardData(startDate: Date, endDate: Date) {
   const response2 = await fetchProductsData();
   const products = await response2.json();
 
-  const topSellingProducts = (products?.data as any[])
+  const topSellingProducts = (products?.data as IProductListItem[] | undefined)
     ?.map((product) => ({
       id: product.id,
       name: product.name,
@@ -61,6 +90,6 @@ export async function fetchDashboardData(startDate: Date, endDate: Date) {
     totalCategories: stats?.data?.totalCategories || 0,
 
     revenueData,
-    topSellingProducts,
+    topSellingProducts: topSellingProducts ?? [],
   };
 }

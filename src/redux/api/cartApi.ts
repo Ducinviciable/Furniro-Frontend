@@ -1,4 +1,4 @@
-import { ICartItem, ICartItemResquest } from "@/utils/types";
+import { ICartItemResquest } from "@/utils/types";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import Cookies from "js-cookie";
 
@@ -27,7 +27,7 @@ export const cartApi = createApi({
     },
   }),
   endpoints: (builder) => ({
-    getCart: builder.query<ICartResponse, any>({
+    getCart: builder.query<ICartResponse, void>({
       query: () => ({
         url: "/",
         method: "GET",

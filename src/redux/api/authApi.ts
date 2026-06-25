@@ -42,7 +42,7 @@ export const authApi = createApi({
       }),
     }),
 
-    checkToken: builder.query<ICheckTokenResponse, any>({
+    checkToken: builder.query<ICheckTokenResponse, void>({
       query: () => ({
         headers: {
           Authorization: `Bearer ${Cookies.get("token")}`,

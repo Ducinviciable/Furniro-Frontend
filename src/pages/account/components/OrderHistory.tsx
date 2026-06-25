@@ -1,43 +1,10 @@
-"use client";
-
 import React, { useState } from "react";
+import Image from "next/image";
 import { ChevronDown, ChevronUp } from "lucide-react";
-
-interface ProductImage {
-  images: string[];
-}
-
-interface Product {
-  name: string;
-  products_images: ProductImage;
-}
-
-interface OrderDetail {
-  id: number;
-  price: number;
-  quantity: number;
-  product_id: number;
-  product: Product;
-}
-
-interface Order {
-  id: number;
-  order_day: string;
-  payment_method: string;
-  subtotal: number;
-  status: OrderStatus;
-  order_detail: OrderDetail[];
-}
-
-enum OrderStatus {
-  PENDING = "PENDING",
-  PROCESSING = "PROCESSING",
-  SHIPPED = "SHIPPED",
-  DELIVERED = "DELIVERED",
-}
+import { IOrder, OrderStatus } from "@/utils/types";
 
 interface OrderHistoryProps {
-  orders: Order[];
+  orders: IOrder[];
 }
 
 const OrderHistory: React.FC<OrderHistoryProps> = ({ orders }) => {
@@ -50,13 +17,13 @@ const OrderHistory: React.FC<OrderHistoryProps> = ({ orders }) => {
 
   const getStatusClass = (status: OrderStatus) => {
     switch (status) {
-      case OrderStatus.PENDING:
+      case "PENDING":
         return "text-yellow-500";
-      case OrderStatus.PROCESSING:
+      case "PROCESSING":
         return "text-blue-500";
-      case OrderStatus.SHIPPED:
+      case "SHIPPED":
         return "text-orange-500";
-      case OrderStatus.DELIVERED:
+      case "DELIVERED":
         return "text-green-500";
       default:
         return "text-gray-500";
@@ -126,12 +93,15 @@ const OrderHistory: React.FC<OrderHistoryProps> = ({ orders }) => {
                         <tr key={item.id} className="border-b">
                           <td className="py-2 text-gray-800">{index + 1}</td>
                           <td className="py-2 text-gray-800">
-                            <img
+                            <Image
                               src={
                                 item.product.products_images?.images[0] ||
                                 "/placeholder.png"
                               }
                               alt={item.product.name}
+                              width={48}
+                              height={48}
+                              unoptimized
                               className="w-12 h-12 object-cover rounded"
                             />
                           </td>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import Header from "../layouts/Header";
 import Footer from "../layouts/Footer";
 import FeatureCard from "@/components/FeatureCard";
@@ -9,7 +9,7 @@ import {
   ICartItemResquest,
   UpdateQuantityType,
 } from "@/utils/types";
-import Router, { useRouter } from "next/router";
+import Router from "next/router";
 import Cart from "./components/Cart";
 import { DECREMENT_CART, INCREMENT_CART } from "@/redux/slices/cartSlice";
 import { useUpdateCartMutation } from "@/redux/api/cartApi";
@@ -29,14 +29,12 @@ const CartPage: React.FC = () => {
         dispatch(DECREMENT_CART(id));
       }
 
-      // Lấy trạng thái mới nhất sau khi Redux đã cập nhật
       const updatedState = await new Promise((resolve) => {
         setTimeout(() => {
           resolve(getProductById(id));
-        }, 1000); // Giảm thời gian chờ tối đa nếu cần
+        }, 1000);
       });
-      const productUpdate = updatedState as ICartItemResquest; // Đảm bảo kiểu dữ liệu
-      console.log(productUpdate);
+      const productUpdate = updatedState as ICartItemResquest | undefined;
 
       const cartUpdateBody: ICartItemResquest = {
         action: CartAction.UPDATE,
@@ -44,8 +42,8 @@ const CartPage: React.FC = () => {
         price: productUpdate?.price || 0,
         quantity:
           type === UpdateQuantityType.INCREMENT
-            ? productUpdate?.quantity + 1
-            : productUpdate?.quantity - 1 || 0,
+            ? (productUpdate?.quantity ?? 0) + 1
+            : (productUpdate?.quantity ?? 0) - 1,
       };
 
       const result = await cartUpdate(cartUpdateBody).unwrap();
@@ -63,11 +61,8 @@ const CartPage: React.FC = () => {
     return cartState.items.find((item) => item.id === id);
   };
 
-  const handleRemoveItem = (id: number) => {};
+  const handleRemoveItem = (_id: number) => {};
 
-  const handleCheckout = () => {
-    console.log("Proceeding to checkout...");
-  };
   const auth = useSelector((state: AppState) => state.auth);
 
   useEffect(() => {
@@ -75,7 +70,7 @@ const CartPage: React.FC = () => {
       Router.push("/auth/login");
     }
   }, [auth.isAuthenticated]);
-  const route = useRouter();
+
   return (
     <>
       <Header />

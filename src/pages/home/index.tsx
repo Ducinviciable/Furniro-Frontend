@@ -8,7 +8,7 @@ import { useGetProductsQuery } from "@/redux/api/productApi";
 import Loading from "@/components/Loading";
 import { IProductInShop } from "@/utils/types";
 const HomePage = () => {
-  const { data: productResponse, isLoading, error } = useGetProductsQuery({});
+  const { data: productResponse, isLoading } = useGetProductsQuery();
   const products: IProductInShop[] =
     Array.isArray(productResponse?.data) && productResponse?.data.length > 0
       ? [...productResponse.data].sort(() => Math.random() - 0.5).slice(0, 8)

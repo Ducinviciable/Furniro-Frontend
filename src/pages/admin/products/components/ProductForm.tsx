@@ -10,6 +10,7 @@ import {
   Stack,
   Chip,
 } from "@mui/material";
+import Image from "next/image";
 import DeleteIcon from "@mui/icons-material/Delete";
 import {
   useGetProductsByIdQuery,
@@ -26,13 +27,13 @@ import CategorySelect from "./CategorySelect";
 const ProductForm = () => {
   const router = useRouter();
   const { id } = router.query;
-  const isEditMode = Boolean(id);
+  const productId = Array.isArray(id) ? id[0] : id;
+  const isEditMode = Boolean(productId);
 
-  const { data, isLoading: isLoadingProduct } = useGetProductsByIdQuery(id, {
+  const { data, isLoading: isLoadingProduct } = useGetProductsByIdQuery(productId, {
     skip: !isEditMode,
   });
-  const { data: categoryDataRes, isLoading: isLoadingCategory } =
-    useGetAllCategoryQuery({});
+  const { data: categoryDataRes } = useGetAllCategoryQuery();
   const categoryData = categoryDataRes?.data;
   console.log(categoryData);
   const [updateProduct] = useUpdateProductMutation();
@@ -103,21 +104,32 @@ const ProductForm = () => {
       }
 
       const updateNestedState = (
-        obj: Record<string, any>,
+        obj: Record<string, unknown>,
         parts: string[],
-        value: unknown
-      ): Record<string, any> => {
+        val: unknown
+      ): Record<string, unknown> => {
         if (parts.length === 1) {
-          return { ...obj, [parts[0]]: value };
+          return { ...obj, [parts[0]]: val };
         }
         const [current, ...rest] = parts;
+        const nested = obj[current];
         return {
           ...obj,
-          [current]: updateNestedState(obj[current] || {}, rest, value),
+          [current]: updateNestedState(
+            (typeof nested === "object" && nested !== null
+              ? nested
+              : {}) as Record<string, unknown>,
+            rest,
+            val
+          ),
         };
       };
 
-      return updateNestedState(prev, nameParts, value);
+      return updateNestedState(
+        prev as unknown as Record<string, unknown>,
+        nameParts,
+        value
+      ) as unknown as IProduct;
     });
   };
 
@@ -610,12 +622,13 @@ const ProductForm = () => {
             {product.products_images?.images.map(
               (image: string, index: number) => (
                 <Box key={index} sx={{ position: "relative" }}>
-                  <img
+                  <Image
                     src={image}
                     alt={`Product Image ${index + 1}`}
+                    width={100}
+                    height={100}
+                    unoptimized
                     style={{
-                      width: 100,
-                      height: 100,
                       objectFit: "cover",
                       borderRadius: 8,
                     }}

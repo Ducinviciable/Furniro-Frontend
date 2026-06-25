@@ -14,7 +14,7 @@ const loadFromLocalStorage = (): IAuthState => {
       };
     }
     return JSON.parse(serializedState);
-  } catch (e) {
+  } catch {
     return {
       user: { name: "", email: "", phone: "" },
       isAuthenticated: false,

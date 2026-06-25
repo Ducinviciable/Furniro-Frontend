@@ -16,7 +16,7 @@ const ProductPage = () => {
     data: productsResponse,
     isLoading,
     isError,
-  } = useGetProductsQuery({});
+  } = useGetProductsQuery();
   const [products, setProducts] = useState<IProductInShop[]>([]);
   const [page, setPage] = useState(1);
   const [productsPerPage, setProductsPerPage] = useState(8);

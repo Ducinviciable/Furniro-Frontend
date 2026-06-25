@@ -12,12 +12,12 @@ import { ICategories } from "@/utils/types";
 import toast from "react-hot-toast";
 import Loading from "@/components/Loading";
 import { PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
+import { getRtkErrorMessage } from "@/utils/rtkHelpers";
 
 export default function CategoriesPage() {
-  const { data, isLoading, error, refetch } = useGetAllCategoryQuery(
-    {},
-    { refetchOnMountOrArgChange: true }
-  );
+  const { data, isLoading, error, refetch } = useGetAllCategoryQuery(undefined, {
+    refetchOnMountOrArgChange: true,
+  });
   const [createCategory] = useCreateCategoryMutation();
   const [updateCategory] = useUpdateCategoryMutation();
   const [deleteCategory] = useDeleteCategoryMutation();
@@ -40,8 +40,7 @@ export default function CategoriesPage() {
   if (error) {
     return (
       <div className="text-center text-red-600">
-        Error:{" "}
-        {(error as any)?.data?.message || (error as any)?.status || "An unknown error occurred."}
+        Error: {getRtkErrorMessage(error)}
       </div>
     );
   }
@@ -56,7 +55,7 @@ export default function CategoriesPage() {
           toast.success("Category created successfully.");
           refetch();
         })
-        .catch((error) => {
+        .catch(() => {
           toast.error("Fail to create category.");
         });
       setIsModalOpen(false);
@@ -78,7 +77,7 @@ export default function CategoriesPage() {
             setNewCategoryName("");
             setIsEditMode(false);
           })
-          .catch((error) => {
+          .catch(() => {
             toast.error("Failed to update category.");
           });
       }
@@ -95,7 +94,7 @@ export default function CategoriesPage() {
         refetch();
         setIsDeleteModalOpen(false);
       })
-      .catch((error) => {
+      .catch(() => {
         toast.error("Failed to delete category.");
       });
   };
@@ -159,7 +158,7 @@ export default function CategoriesPage() {
                       onClick={() => {
                         setIsModalOpen(true);
                         setIsEditMode(true);
-                        setEditingCategoryId(category.id as any);
+                        setEditingCategoryId(Number(category.id));
                         setNewCategoryName(category.name);
                       }}
                       className="text-indigo-600 hover:text-indigo-900 mr-2"
@@ -167,7 +166,7 @@ export default function CategoriesPage() {
                       <PencilIcon className="h-5 w-5" />
                     </button>
                     <button
-                      onClick={() => openDeleteModal(category.id as any)}
+                      onClick={() => openDeleteModal(Number(category.id))}
                       className="text-red-600 hover:text-red-900"
                     >
                       <TrashIcon className="h-5 w-5" />

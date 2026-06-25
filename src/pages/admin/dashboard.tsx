@@ -3,12 +3,12 @@
 import { useState, useEffect } from "react";
 import BarChart from "@/components/charts/BarChart";
 import LineChart from "@/components/charts/LineChart";
-import { fetchDashboardData } from "@/lib/api";
+import { fetchDashboardData, IDashboardData } from "@/lib/api";
 import StatCard from "./dashboard/StatCard";
 import TopSellingProducts from "./dashboard/TopSellingProduct";
 
 export default function AdminDashboard() {
-  const [dashboardData, setDashboardData] = useState<any>(null);
+  const [dashboardData, setDashboardData] = useState<IDashboardData | null>(null);
   const [startDate, setStartDate] = useState(
     new Date(new Date().setMonth(new Date().getMonth() - 1))
       .toISOString()

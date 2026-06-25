@@ -19,14 +19,14 @@ export const customerApi = createApi({
         body,
       }),
     }),
-    getAllCustomer: builder.query<IApiResponse<IUser[]>, any>({
+    getAllCustomer: builder.query<IApiResponse<IUser[]>, void>({
       query: () => ({
         url: "/",
         method: "GET",
       }),
     }),
 
-    deleteCustomer: builder.mutation<IApiResponse<void>, any>({
+    deleteCustomer: builder.mutation<IApiResponse<void>, number>({
       query: (id) => ({
         headers: {
           Authorization: `Bearer ${Cookies.get("token")}`,
@@ -36,7 +36,7 @@ export const customerApi = createApi({
       }),
     }),
 
-    getAddressById: builder.query<IApiResponse<ICreateAddress>, any>({
+    getAddressById: builder.query<IApiResponse<ICreateAddress>, void>({
       query: () => ({
         headers: {
           Authorization: `Bearer ${Cookies.get("token")}`,

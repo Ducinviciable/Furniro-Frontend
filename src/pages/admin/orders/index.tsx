@@ -20,6 +20,8 @@ import {
 } from "@/redux/api/orderApi";
 import Loading from "@/components/Loading";
 import toast from "react-hot-toast";
+import Image from "next/image";
+import { IAdminOrder, OrderStatus } from "@/utils/types";
 
 export default function OrdersPage() {
   const {
@@ -27,15 +29,15 @@ export default function OrdersPage() {
     isLoading,
     error,
     refetch,
-  } = useAdminGetOrdersQuery({});
-  const [allOrders, setAllOrders] = useState<any[]>([]);
-  const [filteredOrders, setFilteredOrders] = useState<any[]>([]);
+  } = useAdminGetOrdersQuery();
+  const [allOrders, setAllOrders] = useState<IAdminOrder[]>([]);
+  const [filteredOrders, setFilteredOrders] = useState<IAdminOrder[]>([]);
   const [statusFilter, setStatusFilter] = useState("");
   const [sortBy, setSortBy] = useState("id");
   const [sortOrder, setSortOrder] = useState("asc");
   const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(10);
-  const [selectedOrder, setSelectedOrder] = useState<any>(null);
+  const [limit] = useState(10);
+  const [selectedOrder, setSelectedOrder] = useState<IAdminOrder | null>(null);
   const [updateOrder] = useUpdateOrderMutation();
   const [deleteOrder] = useDeleteOrderMutation();
 
@@ -47,7 +49,7 @@ export default function OrdersPage() {
           toast.success("Order deleted successfully!");
           refetch();
         })
-        .catch((err) => {
+        .catch(() => {
           toast.error("Failed to delete order");
         });
     }
@@ -109,7 +111,7 @@ export default function OrdersPage() {
     setFilteredOrders(paginatedOrders);
   }, [allOrders, statusFilter, sortBy, sortOrder, page, limit]);
 
-  const handleViewOrder = (order: any) => {
+  const handleViewOrder = (order: IAdminOrder) => {
     setSelectedOrder(order);
   };
 
@@ -263,7 +265,7 @@ export default function OrdersPage() {
                       onChange={(e) =>
                         setSelectedOrder({
                           ...selectedOrder,
-                          status: e.target.value,
+                          status: e.target.value as OrderStatus,
                         })
                       }
                       className="border rounded-md px-2 py-1 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -340,14 +342,19 @@ export default function OrdersPage() {
                   Order Items
                 </h3>
                 <div className="space-y-4">
-                  {selectedOrder.order_detail.map((item: any) => (
+                  {selectedOrder.order_detail.map((item) => (
                     <div
                       key={item.id}
                       className="flex items-center space-x-4 border p-4 rounded-lg shadow-sm"
                     >
-                      <img
-                        src={item.product.products_images.images[0]}
+                      <Image
+                        src={
+                          item.product.products_images?.images[0] ?? "/placeholder.png"
+                        }
                         alt={item.product.name}
+                        width={64}
+                        height={64}
+                        unoptimized
                         className="w-16 h-16 object-cover rounded-md"
                       />
                       <div className="flex-1">
@@ -378,16 +385,17 @@ export default function OrdersPage() {
               </button>
               <button
                 onClick={() => {
+                  if (!selectedOrder) return;
                   updateOrder({
                     id: selectedOrder.id,
                     status: selectedOrder.status,
                   })
                     .unwrap()
-                    .then((result) => {
+                    .then(() => {
                       toast.success("Order updated successfully!");
                       refetch();
                     })
-                    .catch((err) => {
+                    .catch(() => {
                       toast.error("Failed to update order");
                     });
                   handleCloseModal();

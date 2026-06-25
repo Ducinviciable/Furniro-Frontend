@@ -10,7 +10,7 @@ import {
 } from "recharts";
 
 interface BarChartProps {
-  data: Array<{ name: string; value: number }>;
+  data: Record<string, string | number>[];
   xDataKey: string;
   barDataKey: string;
   height?: number;

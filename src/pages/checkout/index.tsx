@@ -49,21 +49,21 @@ const Checkout: React.FC = () => {
   const cartState = useSelector((state: AppState) => state.cart);
 
   const { data: addressRespon, isLoading: isLoadingAddress } =
-    useGetAddressByIdQuery({});
+    useGetAddressByIdQuery();
 
   useEffect(() => {
     const addressId = localStorage.getItem("addressId");
-    if (addressId != undefined) {
-      setFormData({
-        ...formData,
-        first_name: addressRespon?.data.first_name || "",
-        last_name: addressRespon?.data.last_name || "",
-        city: addressRespon?.data.city || "",
-        zipcode: addressRespon?.data.zipcode || "",
-        email: addressRespon?.data.email || "",
-        phone: addressRespon?.data.phone || "",
-        street: addressRespon?.data.street || "",
-      });
+    if (addressId != undefined && addressRespon?.data) {
+      setFormData((prev) => ({
+        ...prev,
+        first_name: addressRespon.data.first_name || "",
+        last_name: addressRespon.data.last_name || "",
+        city: addressRespon.data.city || "",
+        zipcode: addressRespon.data.zipcode || "",
+        email: addressRespon.data.email || "",
+        phone: addressRespon.data.phone || "",
+        street: addressRespon.data.street || "",
+      }));
     }
   }, [addressRespon]);
   const validateForm = () => {
@@ -152,7 +152,7 @@ const Checkout: React.FC = () => {
                   setIsLoading(false);
                 }
               })
-              .catch((error) => {
+              .catch(() => {
                 toast.error("An error occurred. Please try again.");
                 setIsLoading(false);
               });

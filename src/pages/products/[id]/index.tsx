@@ -1,5 +1,4 @@
 import { useRouter } from "next/router";
-import ProductCard from "@/components/ProductCard";
 import ShowMore from "@/components/ShowMore";
 import Footer from "@/pages/layouts/Footer";
 import Header from "@/pages/layouts/Header";
@@ -23,7 +22,7 @@ const ProductDetail = () => {
   const id = useRouter().query.id;
   const [activeTab, setActiveTab] = useState("description");
   const [product, setProduct] = useState<IProduct>();
-  const { data: productData, isLoading, error } = useGetProductsByIdQuery(id);
+  const { data: productData, isLoading } = useGetProductsByIdQuery(id);
   const [categoryId, setCategoryId] = useState<string>("");
   const [mainImage, setMainImage] = useState<string>("");
 

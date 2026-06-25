@@ -17,8 +17,8 @@ const AccountPage = () => {
     }
   }, [token]);
 
-  const { data: userData, isLoading, isError } = useCheckTokenQuery({}, { skip: !token });
-  const { data: orderData, isLoading: orderLoading } = useGetOrdersQuery({}, { skip: !token });
+  const { data: userData, isLoading, isError } = useCheckTokenQuery(undefined, { skip: !token });
+  const { data: orderData, isLoading: orderLoading } = useGetOrdersQuery(undefined, { skip: !token });
 
   useEffect(() => {
     if (isError) {

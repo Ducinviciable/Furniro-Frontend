@@ -19,8 +19,9 @@ import Loading from "@/components/Loading";
 import { IUser } from "@/utils/types";
 import { useState } from "react";
 import toast from "react-hot-toast";
+import { getRtkErrorMessage } from "@/utils/rtkHelpers";
 export default function CustomersPage() {
-  const { data, isLoading, error, refetch } = useGetAllCustomerQuery({});
+  const { data, isLoading, error, refetch } = useGetAllCustomerQuery();
 
   const [deleteCustomer] = useDeleteCustomerMutation();
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -34,7 +35,7 @@ export default function CustomersPage() {
         refetch();
         setIsDeleteModalOpen(false);
       })
-      .catch((error) => {
+      .catch(() => {
         toast.error("Failed to delete customer.");
       });
   };
@@ -56,8 +57,7 @@ export default function CustomersPage() {
   if (error) {
     return (
       <div className="text-center text-red-600">
-        Error:{" "}
-        {(error as any)?.data?.message || (error as any)?.status || "An unknown error occurred."}
+        Error: {getRtkErrorMessage(error)}
       </div>
     );
   }

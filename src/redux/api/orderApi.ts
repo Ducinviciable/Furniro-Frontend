@@ -1,4 +1,11 @@
-import { ICreateOrder, IUpdateOrder, IApiResponse } from "@/utils/types";
+import {
+  ICreateOrder,
+  IUpdateOrder,
+  IApiResponse,
+  IOrder,
+  IAdminOrder,
+  ICreateOrderResponse,
+} from "@/utils/types";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import Cookies from "js-cookie";
 
@@ -12,26 +19,26 @@ export const orderApi = createApi({
     },
   }),
   endpoints: (builder) => ({
-    createOrder: builder.mutation<IApiResponse<any>, ICreateOrder>({
+    createOrder: builder.mutation<IApiResponse<ICreateOrderResponse>, ICreateOrder>({
       query: (body) => ({
         url: "/",
         method: "POST",
         body,
       }),
     }),
-    getOrders: builder.query<IApiResponse<any[]>, any>({
+    getOrders: builder.query<IApiResponse<IOrder[]>, void>({
       query: () => ({
         url: "/",
         method: "GET",
       }),
     }),
-    adminGetOrders: builder.query<IApiResponse<any[]>, any>({
+    adminGetOrders: builder.query<IApiResponse<IAdminOrder[]>, void>({
       query: () => ({
         url: "/admin",
         method: "GET",
       }),
     }),
-    updateOrder: builder.mutation<IApiResponse<any>, IUpdateOrder>({
+    updateOrder: builder.mutation<IApiResponse<IOrder>, IUpdateOrder>({
       query: (body) => ({
         url: ``,
         method: "PATCH",

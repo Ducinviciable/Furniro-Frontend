@@ -4,6 +4,7 @@ import {
   Select,
   InputLabel,
   FormControl,
+  SelectChangeEvent,
 } from "@mui/material";
 import { ICategories, IProduct } from "@/utils/types";
 
@@ -19,6 +20,15 @@ export interface CategorySelectProps {
 const CategorySelect: FC<CategorySelectProps> = (props) => {
   if (!props || !props.product || !props.categories) return null;
   const { categories, product, handleChange } = props;
+
+  const onSelectChange = (event: SelectChangeEvent<string | number>) => {
+    handleChange(
+      event as unknown as React.ChangeEvent<
+        HTMLInputElement | { name?: string | undefined; value: unknown }
+      >
+    );
+  };
+
   return (
     <FormControl fullWidth required>
       <InputLabel id="category-id-label">Category </InputLabel>
@@ -27,10 +37,9 @@ const CategorySelect: FC<CategorySelectProps> = (props) => {
         id="category-id"
         value={product.categories_id || ""}
         label="Category"
-        onChange={handleChange as any}
+        onChange={onSelectChange}
         name="categories_id"
         variant="outlined"
-        type="number"
       >
         {categories.map((category: ICategories) => (
           <MenuItem key={category.id} value={category.id}>

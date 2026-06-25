@@ -1,5 +1,5 @@
 import { NextPage, NextPageContext } from "next";
-const router = require("next/router");
+import Link from "next/link";
 
 interface ErrorProps {
   statusCode?: number;
@@ -35,13 +35,12 @@ const Unauthorized: NextPage = () => {
           You must be logged in to access the page
         </p>
 
-        <button
-          type="button"
+        <Link
+          href="/auth/login"
           className="inline-block px-5 py-3 mt-6 text-sm font-medium text-white bg-indigo-600 rounded hover:bg-indigo-700 focus:outline-none focus:ring"
-          onClick={() => router.push("/login")}
         >
           Try Again
-        </button>
+        </Link>
       </div>
     </div>
   );
@@ -57,16 +56,15 @@ const NotFound: NextPage = () => {
         </p>
 
         <p className="mt-4 text-gray-500">
-          Sorry, we couldn't find the page you are looking for.
+          Sorry, we couldn&apos;t find the page you are looking for.
         </p>
 
-        <button
-          type="button"
-          onClick={() => router.push("/")}
+        <Link
+          href="/"
           className="inline-block px-5 py-3 mt-6 text-sm font-medium text-white bg-indigo-600 rounded hover:bg-indigo-700 focus:outline-none focus:ring"
         >
           Go Back
-        </button>
+        </Link>
       </div>
     </div>
   );
@@ -86,13 +84,12 @@ const ServerError: NextPage = () => {
           Oops, something went wrong. Please try again later.
         </p>
 
-        <button
-          type="button"
-          onClick={() => router.push("/")}
+        <Link
+          href="/"
           className="inline-block px-5 py-3 mt-6 text-sm font-medium text-white bg-indigo-600 rounded hover:bg-indigo-700 focus:outline-none focus:ring"
         >
           Refresh Page
-        </button>
+        </Link>
       </div>
     </div>
   );

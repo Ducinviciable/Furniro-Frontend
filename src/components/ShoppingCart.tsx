@@ -10,7 +10,7 @@ import { rerdirectTo } from "@/utils/appUtils";
 
 const ShoppingCart = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const { data: cartResponse, isLoading } = useGetCartQuery({});
+  const { data: cartResponse, isLoading } = useGetCartQuery();
   const dispatch = useDispatch();
   const cartState = useSelector((state: AppState) => state.cart);
   const authState = useSelector((state: AppState) => state.auth);
@@ -94,11 +94,18 @@ const ShoppingCart = () => {
                 key={index}
                 className="flex items-center justify-between bg-gray-50 p-2 rounded-lg shadow-sm"
               >
-                <img
-                  src={item.image}
-                  alt={item.name}
-                  className="w-16 h-16 rounded-md object-cover"
-                />
+                {item.image ? (
+                  <Image
+                    src={item.image}
+                    alt={item.name ?? "Product"}
+                    width={64}
+                    height={64}
+                    unoptimized
+                    className="w-16 h-16 rounded-md object-cover"
+                  />
+                ) : (
+                  <div className="w-16 h-16 rounded-md bg-gray-200" />
+                )}
                 <div className="flex-1 px-3">
                   <h3 className="font-semibold text-gray-700">{item.name}</h3>
                   <p className="text-gray-500">
