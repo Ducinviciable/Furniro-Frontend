@@ -9,7 +9,6 @@ import {
   IconButton,
   Stack,
   Chip,
-  Grid,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import {
@@ -96,6 +95,7 @@ const ProductForm = () => {
     >
   ) => {
     const { name, value } = event.target;
+    if (!name) return;
     setProduct((prev) => {
       const nameParts = name.split(".");
       if (nameParts.length === 1) {
@@ -103,10 +103,10 @@ const ProductForm = () => {
       }
 
       const updateNestedState = (
-        obj: any,
+        obj: Record<string, any>,
         parts: string[],
-        value: any
-      ): any => {
+        value: unknown
+      ): Record<string, any> => {
         if (parts.length === 1) {
           return { ...obj, [parts[0]]: value };
         }
@@ -122,10 +122,10 @@ const ProductForm = () => {
   };
 
   const handleAddTag = () => {
-    if (newTag && !product.tags.includes(newTag)) {
+    if (newTag && !product.tags?.includes(newTag)) {
       setProduct((prev) => ({
         ...prev,
-        tags: [...prev.tags, newTag],
+        tags: [...(prev.tags || []), newTag],
       }));
       setNewTag("");
     }
@@ -134,7 +134,7 @@ const ProductForm = () => {
   const handleDeleteTag = (tagToDelete: string) => {
     setProduct((prev) => ({
       ...prev,
-      tags: prev.tags.filter((tag) => tag !== tagToDelete),
+      tags: (prev.tags || []).filter((tag) => tag !== tagToDelete),
     }));
   };
 
@@ -150,19 +150,19 @@ const ProductForm = () => {
       if (isEditMode) {
         await updateProduct(productData)
           .unwrap()
-          .then((result) => {
+          .then(() => {
             toast.success("Product updated successfully!");
           })
-          .catch((err) => {
+          .catch(() => {
             toast.error("Failed to update product");
           });
       } else {
         await createProduct(productData)
           .unwrap()
-          .then((result) => {
+          .then(() => {
             toast.success("Product created successfully!");
           })
-          .catch((err) => {
+          .catch(() => {
             toast.error("Failed to create product");
           });
       }
@@ -174,13 +174,16 @@ const ProductForm = () => {
   };
 
   const handleDeleteImage = (image: string) => {
-    setProduct((prev) => ({
-      ...prev,
-      products_images: {
-        ...prev.products_images,
-        images: prev.products_images.images.filter((img) => img !== image),
-      },
-    }));
+    setProduct((prev) => {
+      const currentImages = prev.products_images?.images || [];
+      return {
+        ...prev,
+        products_images: {
+          ...prev.products_images,
+          images: currentImages.filter((img) => img !== image),
+        },
+      };
+    });
   };
 
   const handleImageUpload = async (
@@ -212,12 +215,13 @@ const ProductForm = () => {
       if (response.ok) {
         const imageUrl = result.secure_url;
 
-        if (product.products_images.images.length < 5) {
+        const currentImages = product.products_images?.images || [];
+        if (currentImages.length < 5) {
           setProduct((prev) => ({
             ...prev,
             products_images: {
               ...prev.products_images,
-              images: [...prev.products_images.images, imageUrl],
+              images: [...(prev.products_images?.images || []), imageUrl],
             },
           }));
         } else {
@@ -337,7 +341,7 @@ const ProductForm = () => {
               </Button>
             </Stack>
             <Box sx={{ mt: 1, display: "flex", flexWrap: "wrap", gap: 1 }}>
-              {product.tags.map((tag, index) => (
+              {product.tags?.map((tag, index) => (
                 <Chip
                   key={index}
                   label={tag}
@@ -379,7 +383,7 @@ const ProductForm = () => {
             </Box>
           )}
           <Typography variant="h6">Price</Typography>
-          <Box display="flex" justifyContent="space-between" spacing={2}>
+          <Box display="flex" justifyContent="space-between">
             <Box flex={1} mr={2}>
               <TextField
                 label="Price"
@@ -638,7 +642,7 @@ const ProductForm = () => {
               variant="contained"
               color="primary"
               component="label"
-              disabled={product.products_images.images.length >= 5}
+              disabled={(product.products_images?.images?.length || 0) >= 5}
             >
               Upload Image
               <input

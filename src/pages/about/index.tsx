@@ -2,17 +2,6 @@ import HeadImage from "@/components/HeadImage";
 import Header from "../layouts/Header";
 import Footer from "../layouts/Footer";
 import Image from "next/image";
-import "aos/dist/aos.css";
-import AOS from "aos";
-import { useEffect } from "react";
-
-function MyApp({ Component, pageProps }) {
-  useEffect(() => {
-    AOS.init({ duration: 1000, once: true }); // Initialize AOS
-  }, []);
-
-  return <Component {...pageProps} />;
-}
 
 const AboutPage = () => {
   return (

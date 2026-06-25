@@ -1,6 +1,21 @@
-import { ILogin, IRegister } from "@/utils/types";
+import { ILogin, IRegister, IUser, IApiResponse } from "@/utils/types";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import Cookies from "js-cookie";
+
+export interface ICheckTokenResponse {
+  status: number;
+  message: string;
+  customer: IUser;
+}
+
+export interface IRegisterResponse {
+  result: {
+    id: number;
+    email: string;
+    customer_id: number;
+  };
+  access_token: string;
+}
 
 export const authApi = createApi({
   reducerPath: "authApi",
@@ -11,7 +26,7 @@ export const authApi = createApi({
     },
   }),
   endpoints: (builder) => ({
-    login: builder.mutation<any, ILogin>({
+    login: builder.mutation<IApiResponse<{ access_token: string } & IUser>, ILogin>({
       query: (body) => ({
         url: "/login",
         method: "POST",
@@ -19,7 +34,7 @@ export const authApi = createApi({
       }),
     }),
 
-    register: builder.mutation<any, IRegister>({
+    register: builder.mutation<IApiResponse<IRegisterResponse>, IRegister>({
       query: (body) => ({
         url: "/register",
         method: "POST",
@@ -27,7 +42,7 @@ export const authApi = createApi({
       }),
     }),
 
-    checkToken: builder.query<any, any>({
+    checkToken: builder.query<ICheckTokenResponse, any>({
       query: () => ({
         headers: {
           Authorization: `Bearer ${Cookies.get("token")}`,

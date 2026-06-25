@@ -1,5 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import Cookies from "js-cookie";
+import { IApiResponse, IProduct, ICategories, ICategoryProduct, ISearchProduct, IProductInShop } from "@/utils/types";
 export const productApi = createApi({
   reducerPath: "productApi",
   baseQuery: fetchBaseQuery({
@@ -9,32 +10,32 @@ export const productApi = createApi({
     },
   }),
   endpoints: (builder) => ({
-    getProducts: builder.query<any, any>({
+    getProducts: builder.query<IApiResponse<IProductInShop[]>, any>({
       query: () => ({
         url: "/",
         method: "GET",
       }),
     }),
 
-    getProductsById: builder.query<any, any>({
+    getProductsById: builder.query<IApiResponse<IProduct>, any>({
       query: (id) => ({
         url: `/${id}`,
         method: "GET",
       }),
     }),
-    getProductsByCategory: builder.query<any, any>({
+    getProductsByCategory: builder.query<IApiResponse<ICategoryProduct[]>, string | number>({
       query: (category) => ({
         url: `/category/${category}`,
         method: "GET",
       }),
     }),
-    getAllCategory: builder.query<any, any>({
+    getAllCategory: builder.query<IApiResponse<ICategories[]>, any>({
       query: () => ({
         url: `/category`,
         method: "GET",
       }),
     }),
-    createCategory: builder.mutation<any, any>({
+    createCategory: builder.mutation<IApiResponse<ICategories>, any>({
       query: (body) => ({
         headers: {
           Authorization: `Bearer ${Cookies.get("token")}`,
@@ -44,7 +45,7 @@ export const productApi = createApi({
         body,
       }),
     }),
-    updateCategory: builder.mutation<any, any>({
+    updateCategory: builder.mutation<IApiResponse<ICategories>, any>({
       query: (body) => ({
         headers: {
           Authorization: `Bearer ${Cookies.get("token")}`,
@@ -55,7 +56,7 @@ export const productApi = createApi({
       }),
     }),
 
-    deleteCategory: builder.mutation<any, any>({
+    deleteCategory: builder.mutation<IApiResponse<void>, any>({
       query: (id) => ({
         headers: {
           Authorization: `Bearer ${Cookies.get("token")}`,
@@ -65,7 +66,7 @@ export const productApi = createApi({
       }),
     }),
 
-    updateProduct: builder.mutation<any, any>({
+    updateProduct: builder.mutation<IApiResponse<IProduct>, any>({
       query: (body) => ({
         headers: {
           Authorization: `Bearer ${Cookies.get("token")}`,
@@ -76,7 +77,7 @@ export const productApi = createApi({
       }),
     }),
 
-    createProduct: builder.mutation<any, any>({
+    createProduct: builder.mutation<IApiResponse<IProduct>, any>({
       query: (body) => ({
         headers: {
           Authorization: `Bearer ${Cookies.get("token")}`,
@@ -87,7 +88,7 @@ export const productApi = createApi({
       }),
     }),
 
-    deleteProduct: builder.mutation<any, any>({
+    deleteProduct: builder.mutation<IApiResponse<void>, any>({
       query: (id) => ({
         headers: {
           Authorization: `Bearer ${Cookies.get("token")}`,
@@ -97,7 +98,7 @@ export const productApi = createApi({
       }),
     }),
 
-    searchProduct: builder.query<any, any>({
+    searchProduct: builder.query<IApiResponse<ISearchProduct[]>, string>({
       query: (name) => ({
         url: `/search/${name}`,
         method: "GET",

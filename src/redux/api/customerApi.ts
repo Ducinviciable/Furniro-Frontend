@@ -1,5 +1,4 @@
-import { ICreateAddress } from "@/utils/types";
-import { IUser } from "@/utils/types";
+import { ICreateAddress, IUser, IApiResponse } from "@/utils/types";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import Cookies from "js-cookie";
 
@@ -13,21 +12,21 @@ export const customerApi = createApi({
     },
   }),
   endpoints: (builder) => ({
-    createAddress: builder.mutation<any, ICreateAddress>({
+    createAddress: builder.mutation<IApiResponse<{ id: number }>, ICreateAddress>({
       query: (body) => ({
         url: "/address",
         method: "POST",
         body,
       }),
     }),
-    getAllCustomer: builder.query<any, IUser>({
+    getAllCustomer: builder.query<IApiResponse<IUser[]>, any>({
       query: () => ({
         url: "/",
         method: "GET",
       }),
     }),
 
-    deleteCustomer: builder.mutation<any, any>({
+    deleteCustomer: builder.mutation<IApiResponse<void>, any>({
       query: (id) => ({
         headers: {
           Authorization: `Bearer ${Cookies.get("token")}`,
@@ -37,7 +36,7 @@ export const customerApi = createApi({
       }),
     }),
 
-    getAddressById: builder.query<any, any>({
+    getAddressById: builder.query<IApiResponse<ICreateAddress>, any>({
       query: () => ({
         headers: {
           Authorization: `Bearer ${Cookies.get("token")}`,

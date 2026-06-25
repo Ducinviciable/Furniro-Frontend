@@ -6,9 +6,10 @@ import { rooms } from "@/utils/constant";
 import { useRouter } from "next/router";
 import { useGetProductsQuery } from "@/redux/api/productApi";
 import Loading from "@/components/Loading";
+import { IProductInShop } from "@/utils/types";
 const HomePage = () => {
   const { data: productResponse, isLoading, error } = useGetProductsQuery({});
-  const products =
+  const products: IProductInShop[] =
     Array.isArray(productResponse?.data) && productResponse?.data.length > 0
       ? [...productResponse.data].sort(() => Math.random() - 0.5).slice(0, 8)
       : Array.from({ length: 8 }, (_, i) => ({
@@ -17,8 +18,8 @@ const HomePage = () => {
           type: "Sample Type",
           image: `/assets/images/products.png`,
           price: 100 + i * 10,
-          discount_percent: 10 + i,
-          price_before_discount: 150 + i * 10,
+          sale_percent: 10 + i,
+          created_at: "",
         }));
 
   const [roomSelected, setRoomSelected] = useState(0);

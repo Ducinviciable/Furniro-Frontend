@@ -44,7 +44,7 @@ export async function fetchDashboardData(startDate: Date, endDate: Date) {
   const response2 = await fetchProductsData();
   const products = await response2.json();
 
-  const topSellingProducts = products?.data
+  const topSellingProducts = (products?.data as any[])
     ?.map((product) => ({
       id: product.id,
       name: product.name,

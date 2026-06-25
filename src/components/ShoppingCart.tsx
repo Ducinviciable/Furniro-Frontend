@@ -1,6 +1,5 @@
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
-import { useRouter } from "next/router";
 import { useGetCartQuery } from "@/redux/api/cartApi";
 import Loading from "./Loading";
 import { useDispatch, useSelector } from "react-redux";
@@ -9,34 +8,35 @@ import { SET_CART } from "@/redux/slices/cartSlice";
 import Link from "next/link";
 import { rerdirectTo } from "@/utils/appUtils";
 
-interface CartItem {
-  id: number;
-  name: string;
-  price: number;
-  image: string;
-  quantity: number;
-}
-
 const ShoppingCart = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const { data: cartResponse, isLoading, isError } = useGetCartQuery({});
+  const { data: cartResponse, isLoading } = useGetCartQuery({});
   const dispatch = useDispatch();
   const cartState = useSelector((state: AppState) => state.cart);
   const authState = useSelector((state: AppState) => state.auth);
-  const router = useRouter();
 
   useEffect(() => {
     if (cartResponse && Array.isArray(cartResponse.data)) {
       dispatch(
         SET_CART({
-          items: cartResponse.data,
+          items: cartResponse.data.map((item) => ({
+            id: item.id,
+            product: {
+              id: item.product_id,
+              name: item.name,
+            },
+            name: item.name,
+            image: item.image,
+            price: item.price,
+            quantity: item.quantity,
+          })),
           numberOfItems: cartResponse.total,
           subTotal: cartResponse.data.reduce(
             (total: number, item: { price: number; quantity: number }) =>
               total + item.price * item.quantity,
             0
           ),
-          total: undefined,
+          total: 0,
         })
       );
     }

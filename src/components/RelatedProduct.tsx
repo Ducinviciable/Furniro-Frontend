@@ -1,6 +1,7 @@
 import { useGetProductsByCategoryQuery } from "@/redux/api/productApi";
 import ProductCard from "./ProductCard";
-import React, { useState } from "react";
+import React from "react";
+import { ICategoryProduct } from "@/utils/types";
 
 interface RelatedProductProps {
   categoryId: string;
@@ -20,7 +21,7 @@ const RelatedProduct: React.FC<RelatedProductProps> = ({
   });
 
   const relatedProducts = relatedProductsResponse?.data
-    ?.filter((relatedProduct) => relatedProduct.id !== productId)
+    ?.filter((relatedProduct: ICategoryProduct) => relatedProduct.id?.toString() !== productId)
     .slice(0, 4);
 
   if (isLoading) return <div>Loading...</div>;
@@ -32,11 +33,11 @@ const RelatedProduct: React.FC<RelatedProductProps> = ({
         Related Products
       </h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-8">
-        {relatedProducts?.map((product) => (
+        {relatedProducts?.map((product: ICategoryProduct) => (
           <ProductCard
             key={product.id}
             name={product.name}
-            type={product.type}
+            type={product.categories?.name || ""}
             image={product.products_images}
             price={product.price - (product.price * product.sale_percent) / 100}
             discount_percent={product.sale_percent}

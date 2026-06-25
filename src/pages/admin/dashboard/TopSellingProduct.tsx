@@ -11,9 +11,9 @@ interface TopSellingProductsProps {
   products: Product[];
 }
 
-export default function TopSellingProducts({
-  products,
-}: TopSellingProductsProps) {
+export default function TopSellingProducts(props: TopSellingProductsProps) {
+  if (!props || !props.products) return null;
+  const { products } = props;
   return (
     <ul className="divide-y divide-gray-200">
       {products.map((product) => (

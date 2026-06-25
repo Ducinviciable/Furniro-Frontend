@@ -258,3 +258,31 @@ export type OrderStatus =
   | "SHIPPED"
   | "DELIVERED"
   | "CANCELLED";
+
+export interface IApiResponse<T> {
+  data: T;
+  message?: string;
+  success?: boolean;
+  status?: number;
+}
+
+export interface ICategoryProduct {
+  id: number;
+  name: string;
+  price: number;
+  sale_percent: number;
+  products_images: string;
+  categories?: {
+    id: number;
+    name: string;
+  };
+}
+
+export interface ISearchProduct {
+  id: number;
+  name: string;
+  price: number;
+  imageUrl: string;
+  description: string;
+}
+

@@ -6,6 +6,7 @@ interface CustomerProfileProps {
 }
 
 const CustomerProfile: React.FC<CustomerProfileProps> = ({ customer }) => {
+  if (!customer) return null;
   const initials = customer.name
     .split(" ")
     .map((n) => n[0])

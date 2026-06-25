@@ -1,6 +1,6 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { ICart, ICartItem } from "../../utils/types";
-import { cartApi } from "../api/cartApi";
+import { cartApi, IBackendCartItem } from "../api/cartApi";
 
 // Định nghĩa kiểu state của giỏ hàng
 interface CartState {
@@ -76,7 +76,7 @@ const cartSlice = createSlice({
   extraReducers: (builder) => {
     builder.addMatcher(
       cartApi.endpoints.updateCart.matchFulfilled,
-      (state, action: PayloadAction<{ data: any[]; total: number }>) => {
+      (state, action: PayloadAction<{ data: IBackendCartItem[]; total: number }>) => {
         state.items = action.payload.data.map((item) => ({
           id: item.id,
           product: {

@@ -18,8 +18,9 @@ import {
 import Loading from "@/components/Loading";
 import { IUser } from "@/utils/types";
 import { useState } from "react";
+import toast from "react-hot-toast";
 export default function CustomersPage() {
-  const { data, isLoading, error } = useGetAllCustomerQuery({});
+  const { data, isLoading, error, refetch } = useGetAllCustomerQuery({});
 
   const [deleteCustomer] = useDeleteCustomerMutation();
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -56,7 +57,7 @@ export default function CustomersPage() {
     return (
       <div className="text-center text-red-600">
         Error:{" "}
-        {error?.data?.message || error?.status || "An unknown error occurred."}
+        {(error as any)?.data?.message || (error as any)?.status || "An unknown error occurred."}
       </div>
     );
   }
@@ -90,7 +91,7 @@ export default function CustomersPage() {
                   <Button
                     size="small"
                     color="error"
-                    onClick={() => handleOpenDeleteModal(customer.id)}
+                    onClick={() => handleOpenDeleteModal(customer.id as number)}
                   >
                     Delete
                   </Button>

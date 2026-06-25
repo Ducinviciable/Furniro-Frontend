@@ -8,7 +8,7 @@ import StatCard from "./dashboard/StatCard";
 import TopSellingProducts from "./dashboard/TopSellingProduct";
 
 export default function AdminDashboard() {
-  const [dashboardData, setDashboardData] = useState(null);
+  const [dashboardData, setDashboardData] = useState<any>(null);
   const [startDate, setStartDate] = useState(
     new Date(new Date().setMonth(new Date().getMonth() - 1))
       .toISOString()

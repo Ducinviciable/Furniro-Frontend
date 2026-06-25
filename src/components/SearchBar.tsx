@@ -5,14 +5,7 @@ import { X } from "lucide-react";
 import Image from "next/image";
 import { useSearchProductQuery } from "@/redux/api/productApi";
 import { useRouter } from "next/router";
-
-interface Product {
-  id: number;
-  name: string;
-  price?: number;
-  imageUrl?: string;
-  description: string;
-}
+import { ISearchProduct } from "@/utils/types";
 
 interface SearchBarProps {
   onClose: () => void;
@@ -41,14 +34,14 @@ export default function SearchBar({ onClose }: SearchBarProps) {
   const router = useRouter();
 
   // Gọi API tìm kiếm sản phẩm
-  const { data, isFetching, isError, error } = useSearchProductQuery(
+  const { data, isFetching } = useSearchProductQuery(
     debouncedQuery,
     {
       skip: debouncedQuery.trim().length <= 1,
     }
   );
 
-  const products: Product[] = data?.data || [];
+  const products: ISearchProduct[] = data?.data || [];
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -98,7 +91,7 @@ export default function SearchBar({ onClose }: SearchBarProps) {
         {/* Danh sách sản phẩm gợi ý */}
         {!isFetching && products.length > 0 && (
           <ul className="max-h-96 overflow-auto">
-            {products.map((product: Product) => (
+            {products.map((product: ISearchProduct) => (
               <li
                 key={product.id}
                 className="px-4 py-2 hover:bg-gray-100 cursor-pointer flex items-center"

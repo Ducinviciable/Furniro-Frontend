@@ -50,10 +50,10 @@ export default function ProductsPage() {
   }
 
   if (error) {
-    return <div>Error: {error.message}</div>;
+    return <div>Error: {(error as any).message || (error as any).data?.message || "An unknown error occurred."}</div>;
   }
 
-  const products = productsRes.data || [];
+  const products = productsRes?.data || [];
 
   const currentPageProducts = products.slice(
     page * rowsPerPage,

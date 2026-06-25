@@ -12,6 +12,7 @@ import {
   ICreateOrder,
   InputChange,
   TypePayment,
+  ICartItem,
 } from "@/utils/types";
 import { formatPrice, rerdirectTo } from "@/utils/appUtils";
 import toast from "react-hot-toast";
@@ -126,14 +127,14 @@ const Checkout: React.FC = () => {
         .then((res) => {
           if (res.status == 201) {
             // push order
-            localStorage.setItem("addressId", res.data.id);
+            localStorage.setItem("addressId", res.data.id.toString());
             const orderBody: ICreateOrder = {
               addressId: res.data.id,
               payment_method:
                 formData.paymentMethod ?? TypePayment.BANK_TRANSFER,
               subtotal: cartState.subTotal,
-              orderDetails: cartState.items.map((item: any) => ({
-                product_id: item.product_id,
+              orderDetails: cartState.items.map((item: ICartItem) => ({
+                product_id: item.product.id as number,
                 quantity: item.quantity,
                 price: item.price,
               })),
@@ -306,7 +307,7 @@ const Checkout: React.FC = () => {
             {/* Payment Methods */}
             <h2 className="text-lg font-semibold">Payment Method</h2>
             <PaymentMethod
-              selectedMethod={formData.paymentMethod}
+              selectedMethod={formData.paymentMethod ?? TypePayment.BANK_TRANSFER}
               onChange={(method: TypePayment) =>
                 setFormData({ ...formData, paymentMethod: method })
               }

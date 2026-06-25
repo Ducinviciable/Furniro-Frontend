@@ -1,6 +1,5 @@
 import React, { FC } from "react";
 import {
-  TextField,
   MenuItem,
   Select,
   InputLabel,
@@ -11,13 +10,15 @@ import { ICategories, IProduct } from "@/utils/types";
 export interface CategorySelectProps {
   categories: ICategories[];
   product: IProduct;
-  handleChange: any;
+  handleChange: (
+    event: React.ChangeEvent<
+      HTMLInputElement | { name?: string | undefined; value: unknown }
+    >
+  ) => void;
 }
-const CategorySelect: FC<CategorySelectProps> = ({
-  categories,
-  product,
-  handleChange,
-}) => {
+const CategorySelect: FC<CategorySelectProps> = (props) => {
+  if (!props || !props.product || !props.categories) return null;
+  const { categories, product, handleChange } = props;
   return (
     <FormControl fullWidth required>
       <InputLabel id="category-id-label">Category </InputLabel>
@@ -26,7 +27,7 @@ const CategorySelect: FC<CategorySelectProps> = ({
         id="category-id"
         value={product.categories_id || ""}
         label="Category"
-        onChange={handleChange}
+        onChange={handleChange as any}
         name="categories_id"
         variant="outlined"
         type="number"

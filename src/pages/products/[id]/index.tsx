@@ -32,8 +32,8 @@ const ProductDetail = () => {
       const currentProduct = productData.data;
 
       setProduct(currentProduct);
-      setMainImage(currentProduct.products_images.images[0]);
-      setCategoryId(currentProduct.categories.id); // Cập nhật categoryId ngay lập tức
+      setMainImage(currentProduct.products_images?.images?.[0] || "");
+      setCategoryId(currentProduct.categories?.id || ""); // Cập nhật categoryId ngay lập tức
     }
   }, [productData]);
 
@@ -80,7 +80,7 @@ const ProductDetail = () => {
       <section>
         <div className="bg-[#F9F1E7] p-6">
           <p>
-            Home / {product?.categories.name} / {product?.name}
+            Home / {product?.categories?.name} / {product?.name}
           </p>
         </div>
 
@@ -92,7 +92,7 @@ const ProductDetail = () => {
               <div className="hidden md:grid col-span-1 space-y-4">
                 {/* Thumbnail Images */}
                 <Image
-                  src={product?.products_images.images[1] || ""}
+                  src={product?.products_images?.images[1] || ""}
                   width={83}
                   height={55}
                   alt=""
@@ -100,11 +100,11 @@ const ProductDetail = () => {
                   unoptimized
                   className="w-full h-auto mx-auto object-cover rounded-lg cursor-pointer border"
                   onClick={() =>
-                    setMainImage(product?.products_images.images[1] || "")
+                    setMainImage(product?.products_images?.images[1] || "")
                   }
                 />
                 <Image
-                  src={product?.products_images.images[2] || ""}
+                  src={product?.products_images?.images[2] || ""}
                   width={83}
                   height={55}
                   alt=""
@@ -112,11 +112,11 @@ const ProductDetail = () => {
                   unoptimized
                   className="w-full h-auto mx-auto object-cover rounded-lg cursor-pointer border"
                   onClick={() =>
-                    setMainImage(product?.products_images.images[2] || "")
+                    setMainImage(product?.products_images?.images[2] || "")
                   }
                 />
                 <Image
-                  src={product?.products_images.images[3] || ""}
+                  src={product?.products_images?.images[3] || ""}
                   width={83}
                   height={55}
                   alt=""
@@ -124,11 +124,11 @@ const ProductDetail = () => {
                   unoptimized
                   className="w-full h-auto mx-auto object-cover rounded-lg cursor-pointer border"
                   onClick={() =>
-                    setMainImage(product?.products_images.images[3] || "")
+                    setMainImage(product?.products_images?.images[3] || "")
                   }
                 />
                 <Image
-                  src={product?.products_images.images[0] || ""}
+                  src={product?.products_images?.images[0] || ""}
                   width={83}
                   height={55}
                   alt=""
@@ -136,7 +136,7 @@ const ProductDetail = () => {
                   unoptimized
                   className="w-full h-auto mx-auto object-cover rounded-lg cursor-pointer border"
                   onClick={() =>
-                    setMainImage(product?.products_images.images[0] || "")
+                    setMainImage(product?.products_images?.images[0] || "")
                   }
                 />
               </div>
@@ -173,7 +173,7 @@ const ProductDetail = () => {
                 {/* Thumbnail Images */}
                 <div className="flex space-x-9">
                   <Image
-                    src={product?.products_images.images[1] ?? ""}
+                    src={product?.products_images?.images[1] ?? ""}
                     width={83}
                     height={55}
                     alt=""
@@ -181,11 +181,11 @@ const ProductDetail = () => {
                     unoptimized
                     className="w-full h-auto mx-auto object-cover rounded-lg cursor-pointer border"
                     onClick={() =>
-                      setMainImage(product?.products_images.images[1] ?? "")
+                      setMainImage(product?.products_images?.images[1] ?? "")
                     }
                   />
                   <Image
-                    src={product?.products_images.images[2] ?? ""}
+                    src={product?.products_images?.images[2] ?? ""}
                     width={83}
                     height={55}
                     alt=""
@@ -193,11 +193,11 @@ const ProductDetail = () => {
                     unoptimized
                     className="w-full h-auto mx-auto object-cover rounded-lg cursor-pointer border"
                     onClick={() =>
-                      setMainImage(product?.products_images.images[2] ?? "")
+                      setMainImage(product?.products_images?.images[2] ?? "")
                     }
                   />
                   <Image
-                    src={product?.products_images.images[3] || ""}
+                    src={product?.products_images?.images[3] || ""}
                     width={83}
                     height={55}
                     alt=""
@@ -205,11 +205,11 @@ const ProductDetail = () => {
                     unoptimized
                     className="w-full h-auto mx-auto object-cover rounded-lg cursor-pointer border"
                     onClick={() =>
-                      setMainImage(product?.products_images.images[3] ?? "")
+                      setMainImage(product?.products_images?.images[3] ?? "")
                     }
                   />
                   <Image
-                    src={product?.products_images.images[0] || ""}
+                    src={product?.products_images?.images[0] || ""}
                     width={83}
                     height={55}
                     alt=""
@@ -217,7 +217,7 @@ const ProductDetail = () => {
                     unoptimized
                     className="w-full h-auto mx-auto object-cover rounded-lg cursor-pointer border"
                     onClick={() =>
-                      setMainImage(product?.products_images.images[0] ?? "")
+                      setMainImage(product?.products_images?.images[0] ?? "")
                     }
                   />
                 </div>
@@ -283,13 +283,13 @@ const ProductDetail = () => {
                 className=" px-6 py-4 rounded-lg border border-black"
                 onClick={() =>
                   handleAddToCart({
-                    product_id: product?.id,
+                    product_id: product?.id as number,
                     action: CartAction.ADD,
                     quantity: 1,
                     price:
-                      product?.products_prices?.price -
-                      product?.products_prices?.price *
-                        (product?.products_prices?.sale_percent / 100),
+                      (product?.products_prices?.price ?? 0) -
+                      (product?.products_prices?.price ?? 0) *
+                        ((product?.products_prices?.sale_percent ?? 0) / 100),
                   })
                 }
               >
@@ -399,7 +399,7 @@ const ProductDetail = () => {
                 </p>
               </div>
               <Image
-                src={product?.products_images.images[1] || ""}
+                src={product?.products_images?.images[1] || ""}
                 width={481}
                 height={391}
                 quality={100}
@@ -469,7 +469,7 @@ const ProductDetail = () => {
       </div>
 
       {/* Products with same category */}
-      <RelatedProduct categoryId={categoryId} productId={product?.id} />
+      <RelatedProduct categoryId={categoryId} productId={product?.id?.toString() || ""} />
       <ShowMore />
       <Footer />
     </>

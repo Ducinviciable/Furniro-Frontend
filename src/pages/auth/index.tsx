@@ -74,7 +74,7 @@ const LoginPage = () => {
             // Go to homepage
             Router.push("/");
           } else {
-            toast.error(res.message);
+            toast.error(res.message || "Login failed");
           }
         })
         .catch((error) => {

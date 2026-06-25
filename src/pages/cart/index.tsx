@@ -49,9 +49,13 @@ const CartPage: React.FC = () => {
       };
 
       const result = await cartUpdate(cartUpdateBody).unwrap();
-      toast.success(result.message);
-    } catch (error: any) {
-      toast.error(error.message);
+      toast.success(result.message || "Cart updated successfully");
+    } catch (error) {
+      if (error instanceof Error) {
+        toast.error(error.message);
+      } else {
+        toast.error("Failed to update cart");
+      }
     }
   };
 

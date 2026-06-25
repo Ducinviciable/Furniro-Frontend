@@ -28,14 +28,14 @@ export default function OrdersPage() {
     error,
     refetch,
   } = useAdminGetOrdersQuery({});
-  const [allOrders, setAllOrders] = useState([]);
-  const [filteredOrders, setFilteredOrders] = useState([]);
+  const [allOrders, setAllOrders] = useState<any[]>([]);
+  const [filteredOrders, setFilteredOrders] = useState<any[]>([]);
   const [statusFilter, setStatusFilter] = useState("");
   const [sortBy, setSortBy] = useState("id");
   const [sortOrder, setSortOrder] = useState("asc");
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
-  const [selectedOrder, setSelectedOrder] = useState(null);
+  const [selectedOrder, setSelectedOrder] = useState<any>(null);
   const [updateOrder] = useUpdateOrderMutation();
   const [deleteOrder] = useDeleteOrderMutation();
 
@@ -61,7 +61,7 @@ export default function OrdersPage() {
     "CANCELLED",
   ];
 
-  const getStatusColor = (status) => {
+  const getStatusColor = (status: string) => {
     switch (status) {
       case "DELIVERED":
         return "success";
@@ -96,8 +96,8 @@ export default function OrdersPage() {
         return sortOrder === "asc" ? a.id - b.id : b.id - a.id;
       }
       if (sortBy === "order_day") {
-        const dateA = new Date(a.order_day);
-        const dateB = new Date(b.order_day);
+        const dateA = new Date(a.order_day).getTime();
+        const dateB = new Date(b.order_day).getTime();
         return sortOrder === "asc" ? dateA - dateB : dateB - dateA;
       }
       return 0;
@@ -109,7 +109,7 @@ export default function OrdersPage() {
     setFilteredOrders(paginatedOrders);
   }, [allOrders, statusFilter, sortBy, sortOrder, page, limit]);
 
-  const handleViewOrder = (order) => {
+  const handleViewOrder = (order: any) => {
     setSelectedOrder(order);
   };
 
@@ -340,7 +340,7 @@ export default function OrdersPage() {
                   Order Items
                 </h3>
                 <div className="space-y-4">
-                  {selectedOrder.order_detail.map((item) => (
+                  {selectedOrder.order_detail.map((item: any) => (
                     <div
                       key={item.id}
                       className="flex items-center space-x-4 border p-4 rounded-lg shadow-sm"

@@ -41,7 +41,7 @@ export default function CategoriesPage() {
     return (
       <div className="text-center text-red-600">
         Error:{" "}
-        {error?.data?.message || error?.status || "An unknown error occurred."}
+        {(error as any)?.data?.message || (error as any)?.status || "An unknown error occurred."}
       </div>
     );
   }
@@ -159,7 +159,7 @@ export default function CategoriesPage() {
                       onClick={() => {
                         setIsModalOpen(true);
                         setIsEditMode(true);
-                        setEditingCategoryId(category.id);
+                        setEditingCategoryId(category.id as any);
                         setNewCategoryName(category.name);
                       }}
                       className="text-indigo-600 hover:text-indigo-900 mr-2"
@@ -167,7 +167,7 @@ export default function CategoriesPage() {
                       <PencilIcon className="h-5 w-5" />
                     </button>
                     <button
-                      onClick={() => openDeleteModal(category.id)}
+                      onClick={() => openDeleteModal(category.id as any)}
                       className="text-red-600 hover:text-red-900"
                     >
                       <TrashIcon className="h-5 w-5" />

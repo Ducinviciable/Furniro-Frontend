@@ -11,7 +11,7 @@ interface InputFieldProps {
   isEmail?: boolean;
   name?: string;
   error?: string;
-  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange?: (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
 }
 
 const InputField: React.FC<InputFieldProps> = ({

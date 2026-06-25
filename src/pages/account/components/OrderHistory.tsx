@@ -42,6 +42,7 @@ interface OrderHistoryProps {
 
 const OrderHistory: React.FC<OrderHistoryProps> = ({ orders }) => {
   const [expandedOrder, setExpandedOrder] = useState<number | null>(null);
+  if (!orders) return null;
 
   const toggleOrder = (orderId: number) => {
     setExpandedOrder(expandedOrder === orderId ? null : orderId);

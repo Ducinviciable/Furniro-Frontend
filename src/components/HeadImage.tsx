@@ -4,7 +4,7 @@ interface IHeadImageProps {
   title: string;
   link: string;
 }
-const HeadImage: FC<IHeadImageProps> = ({ title, link }) => {
+const HeadImage: FC<IHeadImageProps> = ({ title }) => {
   return (
     <>
       <div className="relative">

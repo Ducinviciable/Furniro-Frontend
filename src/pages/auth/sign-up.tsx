@@ -56,11 +56,11 @@ const SignupPage = () => {
         .unwrap()
         .then((data) => {
           if (data.status != 200) {
-            toast.error(data.message);
+            toast.error(data.message || "Sign up failed");
           }
           if (data.status == 200) {
             Cookies.set("token", data.data.access_token);
-            toast.success(data.message);
+            toast.success(data.message || "Sign up successful!");
             console.log(data);
             dispatch(
               LOGIN_SUCCESS({

@@ -4,7 +4,9 @@ interface StatCardProps {
   icon: string;
 }
 
-export default function StatCard({ title, value, icon }: StatCardProps) {
+export default function StatCard(props: StatCardProps) {
+  if (!props || !props.title) return null;
+  const { title, value, icon } = props;
   return (
     <div className="bg-white rounded-lg shadow p-6">
       <div className="flex items-center justify-between mb-4">

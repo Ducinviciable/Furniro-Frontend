@@ -2,6 +2,21 @@ import { ICartItem, ICartItemResquest } from "@/utils/types";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import Cookies from "js-cookie";
 
+export interface IBackendCartItem {
+  id: number;
+  product_id: number;
+  name: string;
+  image: string;
+  price: number;
+  quantity: number;
+}
+
+export interface ICartResponse {
+  data: IBackendCartItem[];
+  total: number;
+  message?: string;
+}
+
 export const cartApi = createApi({
   reducerPath: "cartApi",
   baseQuery: fetchBaseQuery({
@@ -12,14 +27,14 @@ export const cartApi = createApi({
     },
   }),
   endpoints: (builder) => ({
-    getCart: builder.query<any, any>({
+    getCart: builder.query<ICartResponse, any>({
       query: () => ({
         url: "/",
         method: "GET",
       }),
     }),
 
-    updateCart: builder.mutation<any, ICartItemResquest>({
+    updateCart: builder.mutation<ICartResponse, ICartItemResquest>({
       query: (body) => ({
         url: "/",
         method: "PATCH",
